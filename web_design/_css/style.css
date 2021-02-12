@@ -1,0 +1,12 @@
+
+/* this is an ID */
+#canvas {
+    border:10px solid #000000;
+}
+
+.container {
+    margin: 0 auto;
+    width: 2000px;
+    height: 1000px;
+}
+
