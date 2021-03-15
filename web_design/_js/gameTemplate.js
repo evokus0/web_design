@@ -2,78 +2,196 @@
 // https://eloquentjavascript.net/code/chapter/17_canvas.js
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
 
-//initializing global variables to create a canvas
-// used to alter and initialize the canvas
+//initializing GLOBAL variables to create a canvas
 let canvasDiv;
 let canvas;
 let ctx;
+let WIDTH = 1000;
+let HEIGHT= 1000;
+
+//container array for mobs/enemies
+let mobs = [];
+
+// lets us know if game is initialized
 let initialized = false;
 
 // setup mouse position variables
-// just intiilizes the variables (sets to 0), does not move the mouse
 let mouseX = 0;
 let mouseY = 0;
-// objects, not a variables
+
+// object setting mousePos
 let mousePos = {
   x: 0,
   y: 0
 };
+
 let mouseClicks = {
   x: 0,
   y: 0
 };
+
 let mouseClickX = 0;
 let mouseClickY = 0;
 
-// Everything else depends on this running
-// Change the global variables
-// sets up the canvas attributes
-// creates a new div inside the document. Takes the HTML document and created a div, id = chuck
+// creating object with keys pressed
+
+let keysDown = {};
+
+addEventListener("keydown", function (e) {
+    keysDown[e.key] = true;
+}, false);
+
+addEventListener("keyup", function (e) {
+    delete keysDown[e.key];
+}, false);
+
+
 function init() {
   // create a new div element
   canvasDiv = document.createElement("div");
   canvasDiv.id = "chuck";
-  // and give it some content (creates the canvas)
-  // storing "canvas" inside div "canvas"
+  // and give it some content
   canvas = document.createElement('canvas');
   // add the text node to the newly created div
-  // code writing code
   canvasDiv.appendChild(canvas);
   // add the newly created element and its content into the DOM
   const currentDiv = document.getElementById("div1");
   document.body.insertBefore(canvasDiv, currentDiv);
-  canvas.width = 500;
-  canvas.height = 500;
-  // gets "chuck" and changes it to the dimensions of the canvas
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
   document.getElementById("chuck").style.width = canvas.width + 'px';
   document.getElementById("chuck").style.height = canvas.height + 'px';
-  // ctx = context, thing that lets us draw on the canvas
   ctx = canvas.getContext('2d');
   initialized = true;
 }
 
-// create an object to hold attributes in order to draw a shape on canvas
-// square object, sets the dimensions
-let mySquare = {
-  w: 50,
-  h: 50,
-  x: 150,
-  y: 200,
-  // comments not here...
-  vx: 0.1,
-  vy: 0.1,
-  color: 'black'
-};
+class Sprite {
+  constructor(w, h, x, y, c) {
+    this.w = w;
+    this.h = h;
+    this.x = x;
+    this.y = y;
+    this.color = c;
+    this.spliced = false;
+    }
+    out_x(){
+      if (this.x + this.w < WIDTH &&
+          this.x > 0
+          ){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    out_y(){
+      if (this.y > 0 &&
+          this.y + this.h < HEIGHT
+          ){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    collide(obj) {
+      if (this.x <= obj.x + obj.w &&
+        obj.x <= this.x + this.w &&
+        this.y <= obj.y + obj.h &&
+        obj.y <= this.y + this.h
+      ) {
+        console.log('collided with ' + obj);
+        return true;
+      }
+    }
+}
+
+class Player extends Sprite {
+  constructor(w, h, x, y, c, vx, vy) {
+  super(w, h, x, y, c);
+  this.vx = vx;
+  this.vy = vy;
+  this.speed = 3;
+  }
+  moveinput() {
+    if ('w' in keysDown || 'W' in keysDown) { // Player control
+        this.vx = 0;
+        this.vy = -this.speed;
+        console.log('w!!!');
+    } else if ('s' in keysDown || 'S' in keysDown) { // Player control
+        this.vx = 0;
+        this.vy = this.speed;
+
+    } else if ('a' in keysDown || 'A' in keysDown) { // Player control
+        this.vy = 0;
+        this.vx = -this.speed;
+
+    } else if ('d' in keysDown || 'D' in keysDown) { // Player control
+        this.vy = 0;
+        this.vx = this.speed;
+    }
+    else{
+      this.vx = 0;
+      this.vy = 0;
+    }
+}
+  update(){
+    this.moveinput();
+    this.out_x();
+    this.out_y();
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+    ctx.strokeRect(this.x, this.y, this.w, this.h);
+  }
+}
+
+class Mob extends Sprite {
+  constructor(w, h, x, y, c, vx, vy) {
+    super(w, h, x, y, c);
+    this.vx = vx;
+    this.vy = vy;
+    }
+    update(){
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.out_x()){
+        this.vx = this.vx * -1
+      }
+      if (this.out_y()){
+        this.vx = this.vy * -1
+      }
+    }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, this.w, this.h);
+      ctx.strokeRect(this.x, this.y, this.w, this.h);
+    }
+}
+
+
+// create instance of class
+let player = new Player(25, 25, WIDTH/2, HEIGHT/2, 'red', 0, 0);
+
+// adds two different sets of mobs to the mobs array
+for (i = 0; i < 10; i++){
+  mobs.push(new Mob(60,60, 200, 100, 'pink', Math.random()*-2, Math.random()*-2));
+  console.log(mobs);
+}
+
+while (mobs.length < 20){
+  mobs.push(new Mob(10,10, 250, 200, 'purple', Math.random()*-2, Math.random()*-2));
+}
+
 
 // gets mouse position when clicked
-// records the mouse position
-// event listener - built in thing call back function
-// Arrow function [=>] passes entire function in to e by the computer as its read.
 addEventListener('mousemove', e => {
-  // global variables being changed
   mouseX = e.offsetX;
   mouseY = e.offsetY;
-  // we're gonna use this later
+  // we're gonna use this
   mousePos = {
     x: mouseX,
     y: mouseY
@@ -81,7 +199,6 @@ addEventListener('mousemove', e => {
 });
 
 // gets mouse position when clicked
-// could make it ana arrow function
 addEventListener('mousedown', mouseClick);
 
 function mouseClick(e) {
@@ -94,37 +211,6 @@ function mouseClick(e) {
   };
 }
 
-// collision detection
-// What objects have X positions [the box, the mouse]
-function collide(a, b) {
-  if (a.x <= b.x &&
-    b.x <= a.x + a.w &&
-    a.y <= b.y &&
-    b.y <= a.y + a.h
-  ) {
-    console.log('collided');
-    return true;
-  }
-}
-
-// updates all elements on canvas
-function update(mod) {
-  if (collide(mySquare, mousePos)) {
-    mySquare.color = 'red';
-  }
-
-  mySquare.x += mySquare.vx * mod;
-  mySquare.y += mySquare.vy * mod;
-  if (mySquare.x + mySquare.w >= canvas.width || mySquare.x <= 0) {
-    mySquare.vx *= -1;
-    mySquare.color = 'blue';
-  }
-  if (mySquare.y + mySquare.h >= canvas.height || mySquare.y <= 0) {
-    mySquare.vy *= -1;
-    mySquare.color = 'green';
-  }
-}
-
 // draws text on canvas
 function drawText(color, font, align, base, text, x, y) {
   ctx.fillStyle = color;
@@ -134,20 +220,23 @@ function drawText(color, font, align, base, text, x, y) {
   ctx.fillText(text, x, y);
 }
 
-// draws a square, circle, or rectangle
-function drawSquare() {
-  ctx.fillStyle = mySquare.color;
-  ctx.fillRect(mySquare.x, mySquare.y, mySquare.w, mySquare.h);
-  ctx.strokeRect(mySquare.x, mySquare.y, mySquare.w, mySquare.h);
-}
+// ########## updates all elements on canvas ##########
+function update(mod) {
+  player.update();
+  //updates all mobs in a group
+  for (let m of mobs){
+    m.update();
+    if (player.collide(m)){
+      m.spliced = true;
+    }
+  }
+  for (let m in mobs){
+    if (mobs[m].spliced){
+      mobs.splice(m, 1);
+    }
+  }
 
-// function drawCircle() {
-//   ctx.fillStyle = myCircle.color;
-//   ctx.beginPath();
-//   ctx.arc(myCircle.x, myCircle.y, myCircle.r, 0, 2 * Math.PI);
-//   ctx.stroke();
-//   ctx.fill();
-// }
+}
 
 // draws all the stuff on the canvas that you want to draw
 function draw() {
@@ -157,7 +246,10 @@ function draw() {
   drawText('black', "24px Helvetica", "left", "top", "Delta: " + gDelta, 400, 32);
   drawText('black', "24px Helvetica", "left", "top", "mousepos: " + mouseX + " " + mouseY, 0, 0);
   drawText('black', "24px Helvetica", "left", "top", "mouseclick: " + mouseClickX + " " + mouseClickY, 0, 32);
-  drawSquare();
+  player.draw();
+  for (let m of mobs){
+    m.draw();
+  }
 }
 
 // set variables necessary for game loop
