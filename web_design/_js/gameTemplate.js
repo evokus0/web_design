@@ -6,32 +6,35 @@
 let canvasDiv;
 let canvas;
 let ctx;
-let WIDTH = 1000;
-let HEIGHT= 1000;
+let WIDTH = 750;
+let HEIGHT= 750;
 
 //container array for mobs/enemies
-let mobs = [];
+let all_mobs = [];
+let evil_mobs = [];
+let food_mobs = [];
+let SCORE = 0
 
 // lets us know if game is initialized
 let initialized = false;
 
-// setup mouse position variables
-let mouseX = 0;
-let mouseY = 0;
+// // setup mouse position variables
+// let mouseX = 0;
+// let mouseY = 0;
 
-// object setting mousePos
-let mousePos = {
-  x: 0,
-  y: 0
-};
+// // object setting mousePos
+// let mousePos = {
+//   x: 0,
+//   y: 0
+// };
 
-let mouseClicks = {
-  x: 0,
-  y: 0
-};
+// let mouseClicks = {
+//   x: 0,
+//   y: 0
+// };
 
-let mouseClickX = 0;
-let mouseClickY = 0;
+// let mouseClickX = 0;
+// let mouseClickY = 0;
 
 // creating object with keys pressed
 
@@ -73,21 +76,13 @@ class Sprite {
     this.y = y;
     this.color = c;
     this.spliced = false;
+    this.alive = true;
     }
-    out_x(){
+    inbounds(){
       if (this.x + this.w < WIDTH &&
-          this.x > 0
-          ){
-        return true;
-      }
-      else{
-        return false;
-      }
-    }
-    out_y(){
-      if (this.y > 0 &&
-          this.y + this.h < HEIGHT
-          ){
+          this.x > 0 &&
+          this.y > 0 &&
+          this.y + this.h < HEIGHT){
         return true;
       }
       else{
@@ -137,10 +132,22 @@ class Player extends Sprite {
 }
   update(){
     this.moveinput();
-    this.out_x();
-    this.out_y();
     this.x += this.vx;
     this.y += this.vy;
+    if (!this.inbounds()){
+      if (this.x <= 0) {
+        this.x = 0;
+      }
+      if (this.y <= 0) {
+        this.y = 0;
+      }
+      if (this.x + this.w >= WIDTH) {
+        this.x = WIDTH-this.w;
+      }
+      if (this.y+this.h >= HEIGHT) {
+        this.y = HEIGHT-this.h;
+      }
+    }
   }
   draw() {
     ctx.fillStyle = this.color;
@@ -149,20 +156,52 @@ class Player extends Sprite {
   }
 }
 
-class Mob extends Sprite {
+class EvilMob extends Sprite {
   constructor(w, h, x, y, c, vx, vy) {
     super(w, h, x, y, c);
     this.vx = vx;
     this.vy = vy;
+    this.evil = true;
     }
     update(){
       this.x += this.vx;
       this.y += this.vy;
-      if (this.out_x()){
-        this.vx = this.vx * -1
+      if (!this.inbounds()){
+        if (this.x < 0 || this.x + this.w > WIDTH) {
+          this.vx *= -1;
+        }
+        if (this.y < 0 || this.y + this.h > HEIGHT) {
+          this.vy *= -1;
+        }
+        // alert('out of bounds');
+        // console.log('out of bounds');
       }
-      if (this.out_y()){
-        this.vx = this.vy * -1
+    }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, this.w, this.h);
+      ctx.strokeRect(this.x, this.y, this.w, this.h);
+    }
+}
+class FoodMob extends Sprite {
+  constructor(w, h, x, y, c, vx, vy) {
+    super(w, h, x, y, c);
+    this.vx = vx;
+    this.vy = vy;
+    this.food = true;
+    }
+    update(){
+      this.x += this.vx;
+      this.y += this.vy;
+      if (!this.inbounds()){
+        if (this.x < 0 || this.x + this.w > WIDTH) {
+          this.vx *= -1;
+        }
+        if (this.y < 0 || this.y + this.h > HEIGHT) {
+          this.vy *= -1;
+        }
+        // alert('out of bounds');
+        // console.log('out of bounds');
       }
     }
     draw() {
@@ -174,42 +213,46 @@ class Mob extends Sprite {
 
 
 // create instance of class
-let player = new Player(25, 25, WIDTH/2, HEIGHT/2, 'red', 0, 0);
+let player = new Player(25, 25, WIDTH/2, HEIGHT/4*3, 'blue', 0, 0);
 
 // adds two different sets of mobs to the mobs array
 for (i = 0; i < 10; i++){
-  mobs.push(new Mob(60,60, 200, 100, 'pink', Math.random()*-2, Math.random()*-2));
-  console.log(mobs);
+  evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'black', Math.random()*-2, Math.random()*-2));
+  console.log(evil_mobs);
+}
+for (i = 0; i < 10; i++){
+  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'yellow', Math.random()*-2, Math.random()*-2));
+  console.log(food_mobs);
 }
 
-while (mobs.length < 20){
-  mobs.push(new Mob(10,10, 250, 200, 'purple', Math.random()*-2, Math.random()*-2));
-}
+// while (mobs.length < 20){
+//   mobs.push(new Mob(10,10, 250, 200, 'purple', Math.random()*-2, Math.random()*-2));
+// }
 
 
-// gets mouse position when clicked
-addEventListener('mousemove', e => {
-  mouseX = e.offsetX;
-  mouseY = e.offsetY;
-  // we're gonna use this
-  mousePos = {
-    x: mouseX,
-    y: mouseY
-  };
-});
+// // gets mouse position when clicked
+// addEventListener('mousemove', e => {
+//   mouseX = e.offsetX;
+//   mouseY = e.offsetY;
+//   // we're gonna use this
+//   mousePos = {
+//     x: mouseX,
+//     y: mouseY
+//   };
+// });
 
-// gets mouse position when clicked
-addEventListener('mousedown', mouseClick);
+// // gets mouse position when clicked
+// addEventListener('mousedown', mouseClick);
 
-function mouseClick(e) {
-  console.log(`Screen X/Y: ${e.screenX}, ${e.screenY}, Client X/Y: ${e.clientX}, ${e.clientY}`);
-  mouseClickX = e.clientX;
-  mouseClickY = e.clientY;
-  mouseClicks = {
-    x: mouseClickX,
-    y: mouseClickY
-  };
-}
+// function mouseClick(e) {
+//   console.log(`Screen X/Y: ${e.screenX}, ${e.screenY}, Client X/Y: ${e.clientX}, ${e.clientY}`);
+//   mouseClickX = e.clientX;
+//   mouseClickY = e.clientY;
+//   mouseClicks = {
+//     x: mouseClickX,
+//     y: mouseClickY
+//   };
+// }
 
 // draws text on canvas
 function drawText(color, font, align, base, text, x, y) {
@@ -221,18 +264,35 @@ function drawText(color, font, align, base, text, x, y) {
 }
 
 // ########## updates all elements on canvas ##########
-function update(mod) {
+function update() {
   player.update();
   //updates all mobs in a group
-  for (let m of mobs){
-    m.update();
-    if (player.collide(m)){
-      m.spliced = true;
+  for (let em of evil_mobs){
+    em.update();
+    if (player.collide(em)){
+      //GAME OVER *************************************************************************
+      player.alive = false;
+
     }
   }
-  for (let m in mobs){
-    if (mobs[m].spliced){
-      mobs.splice(m, 1);
+  for (let fm of food_mobs){
+    fm.update();
+    if (player.collide(fm)){
+      fm.spliced = true;
+      SCORE += 1;
+    }
+  }
+  for (let em of evil_mobs) {
+    for (let fm of food_mobs) {
+      if (em.collide(fm)) {
+        fm.vx *= -1
+        fm.vy *= -1
+      }
+    }
+  }
+  for (let fm in food_mobs){
+    if (food_mobs[fm].spliced){
+      food_mobs.splice(fm, 1);
     }
   }
 
@@ -242,13 +302,17 @@ function update(mod) {
 function draw() {
   // clears the canvas before drawing
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawText('black', "24px Helvetica", "left", "top", "FPS: " + fps, 400, 0);
-  drawText('black', "24px Helvetica", "left", "top", "Delta: " + gDelta, 400, 32);
-  drawText('black', "24px Helvetica", "left", "top", "mousepos: " + mouseX + " " + mouseY, 0, 0);
-  drawText('black', "24px Helvetica", "left", "top", "mouseclick: " + mouseClickX + " " + mouseClickY, 0, 32);
+  drawText('black', "24px Helvetica", "left", "top", "SCORE: " + SCORE, 100, 0);
+  drawText('black', "24px Helvetica", "left", "top", "FPS: " + fps,300, 0);
+  // drawText('black', "24px Helvetica", "left", "top", "Delta: " + gDelta, 400, 32);
+  // drawText('black', "24px Helvetica", "left", "top", "mousepos: " + mouseX + " " + mouseY, 0, 0);
+  // drawText('black', "24px Helvetica", "left", "top", "mouseclick: " + mouseClickX + " " + mouseClickY, 0, 32);
   player.draw();
-  for (let m of mobs){
-    m.draw();
+  for (let em of evil_mobs){
+    em.draw();
+  }
+  for (let fm of food_mobs){
+    fm.draw();
   }
 }
 
