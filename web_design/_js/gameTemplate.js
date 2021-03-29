@@ -10,7 +10,6 @@ let WIDTH = 750;
 let HEIGHT= 750;
 
 //container array for mobs/enemies
-let all_mobs = [];
 let evil_mobs = [];
 let food_mobs = [];
 let SCORE = 0
@@ -216,14 +215,8 @@ class FoodMob extends Sprite {
 let player = new Player(25, 25, WIDTH/2, HEIGHT/4*3, 'blue', 0, 0);
 
 // adds two different sets of mobs to the mobs array
-for (i = 0; i < 10; i++){
-  evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'black', Math.random()*-2, Math.random()*-2));
-  console.log(evil_mobs);
-}
-for (i = 0; i < 10; i++){
-  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'yellow', Math.random()*-2, Math.random()*-2));
-  console.log(food_mobs);
-}
+spawn_evil_mob(10)
+spawn_food_mob(10)
 
 // while (mobs.length < 20){
 //   mobs.push(new Mob(10,10, 250, 200, 'purple', Math.random()*-2, Math.random()*-2));
@@ -254,6 +247,19 @@ for (i = 0; i < 10; i++){
 //   };
 // }
 
+function spawn_evil_mob(x) {
+  for (i = 0; i < x; i++){
+    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'black', Math.random()*-2, Math.random()*-2));
+}
+}
+
+function spawn_food_mob(x) {
+for (i = 0; i < x; i++){
+  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'yellow', Math.random()*-2, Math.random()*-2));
+}
+}
+
+
 // draws text on canvas
 function drawText(color, font, align, base, text, x, y) {
   ctx.fillStyle = color;
@@ -282,20 +288,22 @@ function update() {
       SCORE += 1;
     }
   }
-  for (let em of evil_mobs) {
-    for (let fm of food_mobs) {
-      if (em.collide(fm)) {
-        fm.vx *= -1
-        fm.vy *= -1
-      }
-    }
-  }
+  // for (let em of evil_mobs) {
+  //   for (let fm of food_mobs) {
+  //     if (em.collide(fm)) {
+  //       fm.vx *= -1
+  //       fm.vy *= -1
+  //     }
+  //   }
+  // }
   for (let fm in food_mobs){
     if (food_mobs[fm].spliced){
       food_mobs.splice(fm, 1);
     }
   }
-
+  if (food_mobs.length == 0) {
+    spawn_food_mob(20)
+  }
 }
 
 // draws all the stuff on the canvas that you want to draw
