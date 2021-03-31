@@ -13,6 +13,7 @@ let HEIGHT= 750;
 let evil_mobs = [];
 let food_mobs = [];
 let SCORE = 0
+let ROUND = 0
 
 // lets us know if game is initialized
 let initialized = false;
@@ -94,7 +95,6 @@ class Sprite {
         this.y <= obj.y + obj.h &&
         obj.y <= this.y + this.h
       ) {
-        console.log('collided with ' + obj);
         return true;
       }
     }
@@ -111,7 +111,6 @@ class Player extends Sprite {
     if ('w' in keysDown || 'W' in keysDown) { // Player control
         this.vx = 0;
         this.vy = -this.speed;
-        console.log('w!!!');
     } else if ('s' in keysDown || 'S' in keysDown) { // Player control
         this.vx = 0;
         this.vy = this.speed;
@@ -172,8 +171,7 @@ class EvilMob extends Sprite {
         if (this.y < 0 || this.y + this.h > HEIGHT) {
           this.vy *= -1;
         }
-        // alert('out of bounds');
-        // console.log('out of bounds');
+
       }
     }
     draw() {
@@ -199,8 +197,7 @@ class FoodMob extends Sprite {
         if (this.y < 0 || this.y + this.h > HEIGHT) {
           this.vy *= -1;
         }
-        // alert('out of bounds');
-        // console.log('out of bounds');
+
       }
     }
     draw() {
@@ -215,9 +212,9 @@ class FoodMob extends Sprite {
 let player = new Player(25, 25, WIDTH/2, HEIGHT/4*3, 'blue', 0, 0);
 
 // adds two different sets of mobs to the mobs array
-spawn_evil_mob(10)
-spawn_food_mob(10)
-
+// spawn_evil_mob(10)
+// spawn_food_mob(10)
+// *******************************************************************************************************************
 // while (mobs.length < 20){
 //   mobs.push(new Mob(10,10, 250, 200, 'purple', Math.random()*-2, Math.random()*-2));
 // }
@@ -249,13 +246,13 @@ spawn_food_mob(10)
 
 function spawn_evil_mob(x) {
   for (i = 0; i < x; i++){
-    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'black', Math.random()*-2, Math.random()*-2));
+    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'red', Math.random()*-2, Math.random()*-2));
 }
 }
 
 function spawn_food_mob(x) {
 for (i = 0; i < x; i++){
-  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'yellow', Math.random()*-2, Math.random()*-2));
+  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'green', Math.random()*-2, Math.random()*-2));
 }
 }
 
@@ -278,7 +275,16 @@ function update() {
     if (player.collide(em)){
       //GAME OVER *************************************************************************
       player.alive = false;
-
+      for (let fm of food_mobs) {
+        fm.spliced = true;
+      }
+      for (let em of evil_mobs) {
+        em.spliced = true;
+      }
+      SCORE = 0
+      ROUND = 0 
+      player.x = WIDTH/2
+      player.y = HEIGHT/4*3
     }
   }
   for (let fm of food_mobs){
@@ -296,13 +302,22 @@ function update() {
   //     }
   //   }
   // }
+
   for (let fm in food_mobs){
     if (food_mobs[fm].spliced){
       food_mobs.splice(fm, 1);
     }
   }
+  for (let em in evil_mobs){
+    if (evil_mobs[em].spliced){
+      evil_mobs.splice(em, 1);
+    }
+  }
+
   if (food_mobs.length == 0) {
-    spawn_food_mob(20)
+    ROUND += 1
+    spawn_food_mob(ROUND * 5)
+    spawn_evil_mob(5)
   }
 }
 
@@ -311,7 +326,7 @@ function draw() {
   // clears the canvas before drawing
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawText('black', "24px Helvetica", "left", "top", "SCORE: " + SCORE, 100, 0);
-  drawText('black', "24px Helvetica", "left", "top", "FPS: " + fps,300, 0);
+  drawText('black', "24px Helvetica", "left", "top", "ROUND: " + ROUND,300, 0);
   // drawText('black', "24px Helvetica", "left", "top", "Delta: " + gDelta, 400, 32);
   // drawText('black', "24px Helvetica", "left", "top", "mousepos: " + mouseX + " " + mouseY, 0, 0);
   // drawText('black', "24px Helvetica", "left", "top", "mouseclick: " + mouseClickX + " " + mouseClickY, 0, 32);
