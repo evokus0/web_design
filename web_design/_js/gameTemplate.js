@@ -316,8 +316,12 @@ function update() {
 
   if (food_mobs.length == 0) {
     ROUND += 1
-    spawn_food_mob(ROUND * 5)
-    spawn_evil_mob(5)
+    // for (let em of evil_mobs){
+    //   em.spliced = true;
+    // }
+    spawn_food_mob(ROUND * 2)
+    spawn_evil_mob(2)
+    // spawn_evil_mob(ROUND * 2)
   }
 }
 
