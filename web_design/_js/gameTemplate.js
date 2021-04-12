@@ -105,7 +105,7 @@ class Player extends Sprite {
   super(w, h, x, y, c);
   this.vx = vx;
   this.vy = vy;
-  this.speed = 3;
+  this.speed = 4;
   }
   moveinput() {
     if ('w' in keysDown || 'W' in keysDown) { // Player control
@@ -244,15 +244,22 @@ let player = new Player(25, 25, WIDTH/2, HEIGHT/4*3, 'blue', 0, 0);
 //   };
 // }
 
+function signum(){
+  let options = [-1, 1];
+  index = Math.floor(Math.random()*options.length);
+  result = options[index];
+  return result;
+}
+
 function spawn_evil_mob(x) {
   for (i = 0; i < x; i++){
-    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'red', Math.random()*-2, Math.random()*-2));
+    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'red', Math.random()*3*signum(), Math.random()*3*signum()));
 }
 }
 
 function spawn_food_mob(x) {
 for (i = 0; i < x; i++){
-  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'green', Math.random()*-2, Math.random()*-2));
+  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'green', Math.random()*3*signum(), Math.random()*3*signum()));
 }
 }
 
