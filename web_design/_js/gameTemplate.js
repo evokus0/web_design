@@ -1,6 +1,5 @@
 //sources
 // https://eloquentjavascript.net/code/chapter/17_canvas.js
-// https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
 
 //initializing GLOBAL variables to create a canvas
 let canvasDiv;
@@ -17,24 +16,6 @@ let ROUND = 0
 
 // lets us know if game is initialized
 let initialized = false;
-
-// // setup mouse position variables
-// let mouseX = 0;
-// let mouseY = 0;
-
-// // object setting mousePos
-// let mousePos = {
-//   x: 0,
-//   y: 0
-// };
-
-// let mouseClicks = {
-//   x: 0,
-//   y: 0
-// };
-
-// let mouseClickX = 0;
-// let mouseClickY = 0;
 
 // creating object with keys pressed
 
@@ -76,7 +57,6 @@ class Sprite {
     this.y = y;
     this.color = c;
     this.spliced = false;
-    this.alive = true;
     }
     inbounds(){
       if (this.x + this.w < WIDTH &&
@@ -107,19 +87,20 @@ class Player extends Sprite {
   this.vy = vy;
   this.speed = 4;
   }
+  // Player control
   moveinput() {
-    if ('w' in keysDown || 'W' in keysDown) { // Player control
+    if ('w' in keysDown || 'W' in keysDown) {
         this.vx = 0;
         this.vy = -this.speed;
-    } else if ('s' in keysDown || 'S' in keysDown) { // Player control
+    } else if ('s' in keysDown || 'S' in keysDown) {
         this.vx = 0;
         this.vy = this.speed;
 
-    } else if ('a' in keysDown || 'A' in keysDown) { // Player control
+    } else if ('a' in keysDown || 'A' in keysDown) {
         this.vy = 0;
         this.vx = -this.speed;
 
-    } else if ('d' in keysDown || 'D' in keysDown) { // Player control
+    } else if ('d' in keysDown || 'D' in keysDown) {
         this.vy = 0;
         this.vx = this.speed;
     }
@@ -150,7 +131,7 @@ class Player extends Sprite {
   draw() {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.w, this.h);
-    ctx.strokeRect(this.x, this.y, this.w, this.h);
+    // ctx.strokeRect(this.x, this.y, this.w, this.h);
   }
 }
 
@@ -159,7 +140,6 @@ class EvilMob extends Sprite {
     super(w, h, x, y, c);
     this.vx = vx;
     this.vy = vy;
-    this.evil = true;
     }
     update(){
       this.x += this.vx;
@@ -177,7 +157,7 @@ class EvilMob extends Sprite {
     draw() {
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.w, this.h);
-      ctx.strokeRect(this.x, this.y, this.w, this.h);
+      // ctx.strokeRect(this.x, this.y, this.w, this.h);
     }
 }
 class FoodMob extends Sprite {
@@ -185,7 +165,6 @@ class FoodMob extends Sprite {
     super(w, h, x, y, c);
     this.vx = vx;
     this.vy = vy;
-    this.food = true;
     }
     update(){
       this.x += this.vx;
@@ -203,46 +182,13 @@ class FoodMob extends Sprite {
     draw() {
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.w, this.h);
-      ctx.strokeRect(this.x, this.y, this.w, this.h);
+      // ctx.strokeRect(this.x, this.y, this.w, this.h);
     }
 }
 
 
-// create instance of class
-let player = new Player(25, 25, WIDTH/2, HEIGHT/4*3, 'blue', 0, 0);
-
-// adds two different sets of mobs to the mobs array
-// spawn_evil_mob(10)
-// spawn_food_mob(10)
-// *******************************************************************************************************************
-// while (mobs.length < 20){
-//   mobs.push(new Mob(10,10, 250, 200, 'purple', Math.random()*-2, Math.random()*-2));
-// }
-
-
-// // gets mouse position when clicked
-// addEventListener('mousemove', e => {
-//   mouseX = e.offsetX;
-//   mouseY = e.offsetY;
-//   // we're gonna use this
-//   mousePos = {
-//     x: mouseX,
-//     y: mouseY
-//   };
-// });
-
-// // gets mouse position when clicked
-// addEventListener('mousedown', mouseClick);
-
-// function mouseClick(e) {
-//   console.log(`Screen X/Y: ${e.screenX}, ${e.screenY}, Client X/Y: ${e.clientX}, ${e.clientY}`);
-//   mouseClickX = e.clientX;
-//   mouseClickY = e.clientY;
-//   mouseClicks = {
-//     x: mouseClickX,
-//     y: mouseClickY
-//   };
-// }
+// create instance of player
+let player = new Player(25, 25, WIDTH/2, HEIGHT/4*3, '#0000FF', 0, 0);
 
 function signum(){
   let options = [-1, 1];
@@ -251,15 +197,15 @@ function signum(){
   return result;
 }
 
-function spawn_evil_mob(x) {
-  for (i = 0; i < x; i++){
-    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, 'red', Math.random()*3*signum(), Math.random()*3*signum()));
+function spawn_evil_mob(qty) {
+  for (i = 0; i < qty; i++){
+    evil_mobs.push(new EvilMob(40,40, WIDTH/2, HEIGHT/2, '#FF0000', Math.random()*3*signum(), Math.random()*3*signum()));
 }
 }
 
-function spawn_food_mob(x) {
-for (i = 0; i < x; i++){
-  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, 'green', Math.random()*3*signum(), Math.random()*3*signum()));
+function spawn_food_mob(qty) {
+for (i = 0; i < qty; i++){
+  food_mobs.push(new FoodMob(10,10, WIDTH/2, HEIGHT/2, '#00FF00', Math.random()*3*signum(), Math.random()*3*signum()));
 }
 }
 
@@ -280,8 +226,6 @@ function update() {
   for (let em of evil_mobs){
     em.update();
     if (player.collide(em)){
-      //GAME OVER *************************************************************************
-      player.alive = false;
       for (let fm of food_mobs) {
         fm.spliced = true;
       }
@@ -301,14 +245,6 @@ function update() {
       SCORE += 1;
     }
   }
-  // for (let em of evil_mobs) {
-  //   for (let fm of food_mobs) {
-  //     if (em.collide(fm)) {
-  //       fm.vx *= -1
-  //       fm.vy *= -1
-  //     }
-  //   }
-  // }
 
   for (let fm in food_mobs){
     if (food_mobs[fm].spliced){
@@ -323,12 +259,8 @@ function update() {
 
   if (food_mobs.length == 0) {
     ROUND += 1
-    // for (let em of evil_mobs){
-    //   em.spliced = true;
-    // }
     spawn_food_mob(ROUND * 2)
     spawn_evil_mob(2)
-    // spawn_evil_mob(ROUND * 2)
   }
 }
 
@@ -337,10 +269,7 @@ function draw() {
   // clears the canvas before drawing
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawText('black', "24px Helvetica", "left", "top", "SCORE: " + SCORE, 100, 0);
-  drawText('black', "24px Helvetica", "left", "top", "ROUND: " + ROUND,300, 0);
-  // drawText('black', "24px Helvetica", "left", "top", "Delta: " + gDelta, 400, 32);
-  // drawText('black', "24px Helvetica", "left", "top", "mousepos: " + mouseX + " " + mouseY, 0, 0);
-  // drawText('black', "24px Helvetica", "left", "top", "mouseclick: " + mouseClickX + " " + mouseClickY, 0, 32);
+  drawText('black', "24px Helvetica", "left", "top", "ROUND: " + ROUND, 500, 0);
   player.draw();
   for (let em of evil_mobs){
     em.draw();
