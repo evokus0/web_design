@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Templates from Bootstrap Examples - https://getbootstrap.com/docs/5.0/examples/carousel/, https://getbootstrap.com/docs/5.0/examples/heroes/ -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.83.1">
+    <title>Hotel Bounei - Diamontad</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/carousel/">
+
+    <!-- custom scripts/css -->
+    <script src="_js/script.js"></script>
+    <link rel="stylesheet" type="text/css" href="_css/style.css">
+
+    <!-- Bootstrap core CSS -->
+<link href="_css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="_css/carousel.css" rel="stylesheet">
+  </head>
+  <body>
+    
+    <header class="p-3 bg-dark text-white">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <img src="_images/XPS.png" width="50" height="50">
+          </a>
+    
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <!-- <li><a href="index.html" class="nav-link px-2 text-secondary">Home</a></li> -->
+            <!-- <li><a href="1.html" class="nav-link px-2 text-white">About</a></li> -->
+            <!-- <li><a href="2.html" class="nav-link px-2 text-white">Rooms</a></li> -->
+          </ul>
+    
+          <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+            <input type="search" class="form-control form-control-dark" placeholder="Search...">
+          </form> -->
+    
+          <div class="text-end">
+            <button type="button" class="btn btn-outline-light me-2" >Other Locations</button>
+            <button type="button" class="btn btn-warning" onclick="goToPage('1.html')">Explore Rooms</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+<main>
+
+  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="_images/2021-05-19_00.54.58.png" class="d-block w-100" alt="...">
+
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>Welcome to Nowhere.</h1>
+            <p>Diamontad Hotel Bounei</p>
+            <!-- <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p> -->
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="_images/2021-05-19_00.49.51.png" class="d-block w-100" alt="...">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Breathtaking.</h1>
+            <p>At least as far as hotels in the middle of the desert go.</p>
+            <!-- <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p> -->
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="_images/2021-05-19_00.57.59.png" class="d-block w-100" alt="...">
+
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>Newly Renovated.</h1>
+            <p>Now better than ever.</p>
+            <p><a class="btn btn-lg btn-primary" href="1.html">Explore rooms</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <!-- <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="_images/XPS.png" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="_images/XPS.png" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div> -->
+  
+
+
+
+
+
+  
+  <!-- Marketing messaging and featurettes
+  ================================================== -->
+  <!-- Wrap the rest of the page in another container to center all the content. -->
+
+
+  
+  <div class="container marketing">
+
+    <!-- Three columns of text below the carousel -->
+    <div class="row">
+    </div><!-- /.row -->
+
+
+    <!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Brand new company. <span class="text-muted">But our legacy stems back.</span></h2>
+        <p class="lead">Since our establishment in 2020, we are committed to providing the best hotel experience around.</p>
+      </div>
+      <div class="col-md-5">
+        <img src="_images/XPS.png" width="500" height="500">
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7 order-md-2">
+        <h2 class="featurette-heading">Smack dab in the middle of nowhere.</h2>
+        <p class="lead">Esatblished in 2014, Hotel Bounei was once one of few buildings in the area. And it still is. But there's some nice stuff nearby. There's a theater and a restaurant just down the road, and even more once you head downtown.</p>
+      </div>
+      <div class="col-md-5 order-md-1">
+        <img src="_images/2021-05-19_01.02.11.png" width="500" >
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Like brand new. </h2>
+        <p class="lead">Just renovated last year, our facility is better than ever.</p>
+      </div>
+      <div class="col-md-5">
+        <img src="_images/2021-05-19_00.50.37.png" width="500" >
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <!-- /END THE FEATURETTES -->
+
+  </div><!-- /.container -->
+
+
+  <!-- FOOTER -->
+  <footer class="container">
+    <p class="float-end"><a href="#">Back to top</a></p>
+    <p>&copy; 2014–2021 Diamontad Properties. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+  </footer>
+</main>
+
+
+    <script src="_js/bootstrap.js"></script>
+
+      
+  </body>
+</html>
